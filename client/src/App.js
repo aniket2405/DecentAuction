@@ -3,6 +3,10 @@ import './App.css';
 import Web3 from 'web3';
 import Auction from './contracts/Auction.json';
 import Navbar from './Navbar';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './Home';
+import PlaceToken from './PlaceToken';
+import BidToken from './BidToken';
 
 function App() {
 
@@ -38,6 +42,13 @@ function App() {
 
     if(networkData) {
         const auctions = new web3.eth.Contract(Auction.abi, networkData.address);
+        const ownerId = await auctions.methods.owner.call();
+        console.log(ownerId);
+        const auctioneerId = await auctions.methods.auctioneer.call();
+        console.log(auctioneerId);
+        const minimumBid = await auctions.methods.minimumBid.call();
+        console.log(minimumBid);
+
         setAuction(auctions);
         setLoader(false);
     } else {
@@ -61,13 +72,25 @@ function App() {
    }
 
   return (
+    <Router>
     <div className="App">
-    <div className="Navbar">
-    <Navbar account={currentAccount}/>
+    <Switch>
+    <Route exact path='/'>
+      <Navbar account={currentAccount}/>
+      <Home/>
+    </Route>
+    <Route wxact path='/placetoken'> 
+        <Navbar account={currentAccount}/>
+        <PlaceToken/>
+    </Route>
+    <Route exact path='/bidtoken'> 
+       <Navbar account={currentAccount}/>
+        <BidToken/>
+    </Route>
+    <Route path='/' render={() => <div>error 404</div>}/>
+    </Switch>
     </div>
-      <h4>Put your NFTs for auction and get the justified price for them with a unique SMRA-based auction system</h4>
-      
-    </div>
+    </Router>
   );
 }
 
