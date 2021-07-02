@@ -14,6 +14,9 @@
     "web-vitals": "^1.0.1",
     "web3": "^1.2.11"
   },
+  "devDependencies": {
+    "tailwindcss": "^2.1.4"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

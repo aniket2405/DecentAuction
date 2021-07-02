@@ -74,8 +74,10 @@ contract Auction {
     }
  
     // EVENTS
-    event roundEnded(address bidder, uint256 amount);
+    event generatesBlindBid(bytes32 hashedBid);
+    event roundEnded(address bidder, uint256 amount, uint256 userCount);
     event AuctionEnded(address winner, uint256 amount);
+    event roundStarted(uint256 amount);
  
     //FUNCTIONS
  
@@ -95,11 +97,13 @@ contract Auction {
  
     function generateBlindedBidBytes32(uint256 value)
         public
-        view
         onlyNotEnded
-        returns (bytes32)
+        onlyNotOwner
     {
-        return keccak256(abi.encodePacked(value, msg.sender)); // taking the user address as the cryptographic salt
+        bytes32 hashedBid;
+        hashedBid = keccak256(abi.encodePacked(value, msg.sender)); // taking the user address as the cryptographic salt
+        emit generatesBlindBid(hashedBid);
+       // return hashedBid;
     }
  
     function bid(bytes32 _blindedBid)
@@ -174,6 +178,7 @@ contract Auction {
         // must check for a case where no users participate in a round
  
         if (activeUsersCount > 1) {
+            emit roundEnded(highestBidder, highestBid, activeUsersCount);
             roundStart();
             // minimumBid = highestBid;
             // activeUsersCount = 0;
@@ -190,13 +195,14 @@ contract Auction {
         }
     }
  
-    function roundStart() internal returns (uint256 roundStartBid) {
+    function roundStart() internal {
         minimumBid = highestBid;
         activeUsersCount = 0;
         roundNumber++;
         biddingEnd = block.timestamp + biddingTime;
         revealEnd = biddingEnd + revealTime;
-        return minimumBid;
+        emit roundStarted(minimumBid);
+        // return minimumBid;
     }
  
     function withdraw() public onlyValidWithdrawal returns (bool success) {
@@ -338,5 +344,3 @@ contract Auction {
         // THIS FUNCTION IS INCOMPLETE
     }
     */
- 
-

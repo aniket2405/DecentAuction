@@ -10,6 +10,8 @@ import BidToken from './BidToken';
 
 function App() {
 
+  
+
   const [refresh, setrefresh] = useState(0);
   const [currentAccount, setCurrentaccount] = useState("");
   const [loader, setLoader] = useState(true);
@@ -28,7 +30,7 @@ function App() {
     }
   };
 
-  const loadBlockchainData = async () => {
+   const loadBlockchainData = async () => {
     setLoader(true);
     const web3 = window.web3;
 
@@ -39,15 +41,22 @@ function App() {
     const networkId = await web3.eth.net.getId();
 
     const networkData = Auction.networks[networkId];
+    console.log(networkData);
 
     if(networkData) {
         const auctions = new web3.eth.Contract(Auction.abi, networkData.address);
-        const ownerId = await auctions.methods.owner.call();
+        const x = await auctions.methods.activeUsersCount.call();
+        console.log(x);
+        const y = await auctions.methods;
+        console.log(y)
+       /*  const ownerId = await auctions.methods.owner.call();
         console.log(ownerId);
         const auctioneerId = await auctions.methods.auctioneer.call();
         console.log(auctioneerId);
         const minimumBid = await auctions.methods.minimumBid.call();
-        console.log(minimumBid);
+        console.log(minimumBid); */
+
+        console.log(auctions);
 
         setAuction(auctions);
         setLoader(false);
@@ -59,6 +68,7 @@ function App() {
    useEffect(() => {
     loadWeb3();
     loadBlockchainData();
+    
 
     if (refresh === 1) {
       setrefresh(0);
@@ -93,5 +103,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;

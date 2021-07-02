@@ -1,4 +1,6 @@
 import React from 'react';
+import Web3 from 'web3';
+import Auction from './contracts/Auction.json';
 
 function PlaceToken() {
     return (

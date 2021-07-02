@@ -3,8 +3,8 @@ const Auction = artifacts.require("Auction")
 module.exports = function (deployer) {
   deployer.deploy(
     Auction,
-    '0x284c2390B5634C94426cDBF2623947721BE7E462',
-    10,
-    '0xBB3dd645c3adBfA5F0D7f4AFC5B15319819D8D75'  
+    '0x327183B59a4E769A08379dF111E44dB2d0EfE242',
+    2,
+    '0x6278735670b58aD93Ee1F2B9157b95AAA7395b47'  
   )
 }
